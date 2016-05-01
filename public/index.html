@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Node/Angular Todo App</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+        html                    { overflow-y:scroll; }
+        body                    { padding-top:50px; }
+        #todo-list              { margin-bottom:30px; }
+    </style>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="core.js"></script>
+</head>
+<body ng-app="ToDo" ng-controller="mainController">
+    <div class="container">
+
+        <div class="jumbotron text-center">
+            <h1> To Do List
+                <span class="label label-info">
+                    {{todos.length}}
+                </span>
+            </h1>
+        </div>
+
+        <div id="todo-list" class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="checkbox" ng-repeat="todo in todos">
+
+                    <input type="checkbox" ng-click="deleteTodo(todo._id)">
+                    {{todo.text}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control text-center input-lg" placeholder="Type ToDo Here" ng-model="formData.text">
+
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add ToDo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var todo = angular.module('ToDo',[]);
+
+        todo.controller('mainController',function($scope,$http){
+            $scope.formData = {};
+
+            $http.get('api/todos').success(function(data){
+                $scope.todos = data;
+                $scope.name = 'hello';
+                console.log(data);
+            }).error(function(err){
+                console.log('ERROR: '+err);
+            });
+
+            $scope.createTodo = function(){
+                $http.post('api/todos',$scope.formData).success(function(data){
+                    $scope.formData = {};
+                    $scope.todos = data;
+                    console.log(data);
+                }).error(function(err){
+                    console.log('ERROR: '+err);
+                });
+            };
+
+            $scope.deleteTodo = function(id){
+                $http.delete('api/todos/'+id).success(function(data){
+                    $scope.todos = data;
+                    console.log(data);
+                }).error(function(err){
+                    console.log('ERROR: '+err);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

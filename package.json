@@ -1,0 +1,15 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "main":"server.js",
+  "author":"Chamil",
+  "dependencies": {
+    "mongoose": "latest",
+    "express": "latest",
+    "morgan": "latest",
+    "body-parser": "latest",
+    "method-override": "latest",
+    "angular": "latest",
+    "angular-material":"latest"
+  }
+}
